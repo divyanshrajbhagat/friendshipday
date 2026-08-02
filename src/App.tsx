@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const FRIEND = 'Prachiiiiii 🐼'
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 6
 
 const FLIP_CARDS = [
   { img: '/flip_1.jpg', msg: 'You really don’t make it easy to ignore you 😏' },
@@ -1096,7 +1096,6 @@ export default function App() {
   const steps: React.ReactNode[] = [
     <EnvelopeStep onNext={goNext} />,
     <HeroStep onNext={goNext} />,
-    <MusicStep onNext={goNext} />,
     <MemoryStep onNext={goNext} />,
     <ScratchStep onNext={goNext} />,
     <MemeStep onNext={goNext} />,
