@@ -439,36 +439,57 @@ function HeroStep({ onNext }: { onNext: () => void }) {
 
 // ── Step 2: Music ─────────────────────────────────────────────────────────────
 
+// ── Step 2: Music ─────────────────────────────────────────────────────────────
+
 function MusicStep({ onNext }: { onNext: () => void }) {
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
-  const timerRef = useRef<number | null>(null)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(180)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  useEffect(() => {
+  const togglePlay = () => {
+    if (!audioRef.current) return
     if (playing) {
-      timerRef.current = window.setInterval(() => {
-        setProgress((p) => {
-          if (p >= 100) {
-            setPlaying(false)
-            return 0
-          }
-          return p + 100 / 1800
-        })
-      }, 100)
+      audioRef.current.pause()
+      setPlaying(false)
     } else {
-      if (timerRef.current !== null) clearInterval(timerRef.current)
+      audioRef.current
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          setPlaying((p) => !p)
+        })
     }
-    return () => {
-      if (timerRef.current !== null) clearInterval(timerRef.current)
-    }
-  }, [playing])
+  }
 
-  const elapsed = Math.floor((progress / 100) * 180)
-  const mins = Math.floor(elapsed / 60)
-  const secs = elapsed % 60
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return
+    const cur = audioRef.current.currentTime || 0
+    const dur = audioRef.current.duration || 180
+    setCurrentTime(cur)
+    if (dur && !isNaN(dur) && isFinite(dur)) setDuration(dur)
+    setProgress((cur / (dur || 180)) * 100)
+  }
+
+  const formatTime = (timeInSecs: number) => {
+    const elapsed = Math.floor(timeInSecs || 0)
+    const mins = Math.floor(elapsed / 60)
+    const secs = elapsed % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
   return (
     <div className="h-full flex flex-col items-center justify-center px-5 pt-14 pb-6">
+      <audio
+        ref={audioRef}
+        src="/song.mp3"
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={() => {
+          setPlaying(false)
+          setProgress(0)
+        }}
+      />
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
           <h2 className="font-['Caveat'] text-5xl" style={{ color: '#5a3d5c' }}>
@@ -522,10 +543,8 @@ function MusicStep({ onNext }: { onNext: () => void }) {
               className="flex justify-between mt-1 text-xs font-['Nunito']"
               style={{ color: '#c4a0be' }}
             >
-              <span>
-                {mins}:{secs.toString().padStart(2, '0')}
-              </span>
-              <span>3:00</span>
+              <span>{formatTime(currentTime)}</span>
+              <span>{formatTime(duration)}</span>
             </div>
           </div>
 
@@ -533,8 +552,8 @@ function MusicStep({ onNext }: { onNext: () => void }) {
           <div className="flex justify-center items-center gap-5 mt-5">
             <button className="text-2xl opacity-30">⏮</button>
             <button
-              onClick={() => setPlaying((p) => !p)}
-              className="w-16 h-16 rounded-full text-white text-2xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform"
+              onClick={togglePlay}
+              className="w-16 h-16 rounded-full text-white text-2xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform cursor-pointer"
               style={{ background: 'linear-gradient(135deg,#f9a8c9,#6dcba0)' }}
             >
               {playing ? '⏸' : '▶'}
