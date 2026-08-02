@@ -365,20 +365,23 @@ function HeroStep({ onNext }: { onNext: () => void }) {
           To My Favourite Person
         </h1>
 
-        <div className="relative mb-6 group">
-          <div
-            className="absolute -inset-2 rounded-3xl opacity-40 blur-sm"
-            style={{ background: 'linear-gradient(135deg,#ffd6e7,#b8e8d4)' }}
-          />
+        <div
+          className="relative mb-6 group w-full overflow-x-auto overflow-y-auto max-h-[360px] rounded-3xl shadow-xl flex items-center justify-center p-1"
+          style={{
+            backgroundColor: '#f0e8ef',
+            border: '1.5px solid rgba(255,182,193,0.5)',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
           <img
             src="/prachiii_hero.png"
             alt="Prachiii 🐼"
-            className="relative rounded-3xl w-full object-cover shadow-xl"
-            style={{ height: 220, backgroundColor: '#f0e8ef' }}
+            className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl"
             loading="lazy"
           />
           <span
-            className="absolute -top-4 -right-3 text-3xl pointer-events-none"
+            className="absolute -top-3 -right-2 text-3xl pointer-events-none z-10"
             style={{ animation: 'floatDrift 3s ease-in-out infinite alternate' }}
           >
             🌸
@@ -409,17 +412,21 @@ function HeroStep({ onNext }: { onNext: () => void }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2.5 w-full">
           {GALLERY.map((src, i) => (
             <div
               key={i}
-              className="overflow-hidden rounded-2xl shadow-md"
-              style={{ backgroundColor: '#f0e8ef' }}
+              className="overflow-x-auto overflow-y-auto rounded-2xl shadow-md flex items-center justify-center p-1 border border-white/60 h-24 sm:h-28"
+              style={{
+                backgroundColor: '#fff0f5',
+                overscrollBehavior: 'contain',
+                WebkitOverflowScrolling: 'touch',
+              }}
             >
               <img
                 src={src}
                 alt={`Memory ${i + 1}`}
-                className="w-full h-20 object-cover hover:scale-105 transition-transform duration-500"
+                className="max-w-full max-h-full w-auto h-auto object-contain rounded-xl hover:scale-105 transition-transform duration-300"
                 loading="lazy"
               />
             </div>
@@ -576,16 +583,21 @@ function FlipCard({ img, msg }: { img: string; msg: string }) {
             inset: 0,
             backfaceVisibility: 'hidden',
             borderRadius: 14,
-            overflow: 'hidden',
+            overflowX: 'auto',
+            overflowY: 'auto',
             boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+            backgroundColor: '#fff0f5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           <img
             src={img}
             alt=""
-            className="w-full h-full object-cover"
+            className="max-w-full max-h-full w-auto h-auto object-contain rounded-xl p-0.5"
             loading="lazy"
-            style={{ backgroundColor: '#f0e8ef' }}
           />
           <div
             style={{
@@ -595,9 +607,10 @@ function FlipCard({ img, msg }: { img: string; msg: string }) {
               right: 0,
               display: 'flex',
               justifyContent: 'center',
+              pointerEvents: 'none',
             }}
           >
-            <span className="font-['Nunito'] text-xs text-white/80 bg-black/25 px-3 py-0.5 rounded-full">
+            <span className="font-['Nunito'] text-xs text-white/90 bg-black/40 backdrop-blur-xs px-3 py-0.5 rounded-full shadow-sm">
               tap ✨
             </span>
           </div>
@@ -1009,24 +1022,26 @@ function FinalStep({ onReplay }: { onReplay: () => void }) {
               </p>
 
               {/* Polaroid stickers */}
-              <div className="flex gap-3 my-4">
+              <div className="flex gap-3 my-4 overflow-x-auto py-1 max-w-full" style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}>
                 {[
                   '/letter_polaroid_1.jpg',
                   '/letter_polaroid_2.jpg',
                 ].map((src, i) => (
                   <div
                     key={i}
-                    className="overflow-hidden shadow-sm"
+                    className="overflow-x-auto overflow-y-auto shadow-md shrink-0 flex items-center justify-center p-0.5"
                     style={{
-                      width: 80,
-                      height: 60,
-                      backgroundColor: '#f0e8ef',
-                      borderRadius: 8,
+                      width: 110,
+                      height: 85,
+                      backgroundColor: '#ffffff',
+                      borderRadius: 10,
                       transform: i === 0 ? 'rotate(-2.5deg)' : 'rotate(2deg)',
                       border: '3px solid white',
+                      overscrollBehavior: 'contain',
+                      WebkitOverflowScrolling: 'touch',
                     }}
                   >
-                    <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+                    <img src={src} alt="" className="max-w-full max-h-full w-auto h-auto object-contain rounded-md" loading="lazy" />
                   </div>
                 ))}
               </div>
